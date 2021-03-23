@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "320009345682",
+    "project_id": "soil-nutrient",
+    "storage_bucket": "soil-nutrient.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320009345682:android:bb84a5f2e24eece49c644b",
+        "android_client_info": {
+          "package_name": "com.example.soilnutrientanalyzer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320009345682-op9764hpod93ldp7br0appavi7m2bc5f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.soilnutrientanalyzer",
+            "certificate_hash": "9ede2e891719aafaeec64e08300fa088e5cf00a8"
+          }
+        },
+        {
+          "client_id": "320009345682-5hgedgp75ggq7b5toctbsdt0d4ba4935.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFdxX-Hj32jcsYNmMwie2TrGaofaMHc5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320009345682-5hgedgp75ggq7b5toctbsdt0d4ba4935.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
