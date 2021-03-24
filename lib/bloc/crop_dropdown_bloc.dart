@@ -1,73 +1,103 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:soilnutrientanalyzer/app_response.dart';
 import 'package:soilnutrientanalyzer/model/crop.dart';
-import 'package:soilnutrientanalyzer/repo/crop_repo.dart';
+import 'package:soilnutrientanalyzer/repository/crop_repository.dart';
 
 class LanguageCubit extends Cubit<LanguageState> {
-  final List<Crop> crops;
-  final List<String> soils;
-  LanguageCubit(this.crops, this.soils)
-      : super(LanguageState.named(
-          crops: crops,
-          selectedCrop:
-              Crop.named(name: 'Rice', image: 'assets/images/rice.png'),
-          soils: soils,
-          selectedSoil: 'Black soils',
-        ));
+  final CropRepository cropRepository;
+  LanguageCubit(this.cropRepository) : super(LanguageInitialState());
 
-  void updateLanguage(BuildContext context, String language) {
-    List<Crop> _crops = TranslateRepo.translate(language);
-    Crop crop = _crops
-        .firstWhere((element) => element.image == state.selectedCrop.image);
-    int index = state.soils.indexOf(state.selectedSoil);
-    List<String> _soils = TranslateRepo.soliType(language);
-    emit(state.copyWith(
-      selectedCrop: crop,
-      crops: _crops,
-      selectedSoil: _soils[index],
-      soils: _soils,
-    ));
+  void updateLanguage(String language, LanguageSuccessState langState) async {
+    emit(LanguageLoadingState());
+    AppResponse<Map<String, String>> basicWords =
+        await cropRepository.translateBasicWords(language);
+    AppResponse<List<Crop>> crops =
+        await cropRepository.translateCrop(language);
+    AppResponse<List<String>> soilType =
+        await cropRepository.translateSoilType(language);
+    if (soilType.isSuccess && basicWords.isSuccess && crops.isSuccess) {
+      emit(LanguageSuccessState(
+        crops.data,
+        langState?.selectedCrop ?? crops.data.first,
+        soilType.data,
+        langState?.selectedSoil ?? soilType.data.first,
+        basicWords.data,
+      ));
+    } else {
+      emit(LanguageErrorState(
+          basicWords.error ?? crops.error ?? soilType.error));
+    }
   }
 
-  void updateCrop(Crop crop) {
-    emit(state.copyWith(selectedCrop: crop));
+  void updateCrop(LanguageSuccessState langState, Crop selectedCrop) {
+    emit(langState.copyWith(selectedCrop: selectedCrop));
   }
 
-  void updateSoil(String _soil) {
-    emit(state.copyWith(selectedSoil: _soil));
+  void updateSoil(LanguageSuccessState langState, String selectedSoil) {
+    emit(langState.copyWith(selectedSoil: selectedSoil));
   }
 }
 
-class LanguageState extends Equatable {
+abstract class LanguageState extends Equatable {}
+
+class LanguageSuccessState extends LanguageState {
   final List<Crop> crops;
   final Crop selectedCrop;
   final List<String> soils;
   final String selectedSoil;
+  final Map<String, String> basicWords;
 
-  LanguageState(this.crops, this.selectedCrop, this.soils, this.selectedSoil);
-  LanguageState.named({
+  LanguageSuccessState(this.crops, this.selectedCrop, this.soils,
+      this.selectedSoil, this.basicWords);
+  LanguageSuccessState.named({
     this.crops,
     this.selectedCrop,
     this.soils,
     this.selectedSoil,
+    this.basicWords,
   });
 
-  LanguageState copyWith({
+  LanguageSuccessState copyWith({
     List<Crop> crops,
     Crop selectedCrop,
     List<String> soils,
     String selectedSoil,
+    Map<String, String> basicWords,
   }) {
-    return LanguageState.named(
+    return LanguageSuccessState.named(
       crops: crops ?? this.crops,
       selectedCrop: selectedCrop ?? this.selectedCrop,
       soils: soils ?? this.soils,
       selectedSoil: selectedSoil ?? this.selectedSoil,
+      basicWords: basicWords ?? this.basicWords,
     );
   }
 
   @override
-  List<Object> get props =>
-      [this.crops, this.selectedCrop, this.selectedSoil, this.soils];
+  List<Object> get props => [
+        this.crops,
+        this.selectedCrop,
+        this.selectedSoil,
+        this.soils,
+        this.basicWords
+      ];
+}
+
+class LanguageInitialState extends LanguageState {
+  @override
+  List<Object> get props => [];
+}
+
+class LanguageLoadingState extends LanguageState {
+  @override
+  List<Object> get props => [];
+}
+
+class LanguageErrorState extends LanguageState {
+  final String error;
+
+  LanguageErrorState(this.error);
+  @override
+  List<Object> get props => [];
 }

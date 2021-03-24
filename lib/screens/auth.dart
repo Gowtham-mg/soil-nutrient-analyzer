@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:soilnutrientanalyzer/bloc/bloc.dart';
+import 'package:soilnutrientanalyzer/bloc/authbloc.dart';
 import 'package:soilnutrientanalyzer/helper/validation_helper.dart';
 import 'package:soilnutrientanalyzer/metadata/meta_asset.dart';
 import 'package:soilnutrientanalyzer/metadata/meta_colors.dart';

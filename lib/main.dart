@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:soilnutrientanalyzer/bloc/bloc.dart';
-import 'package:soilnutrientanalyzer/repo/crop_repo.dart';
+import 'package:soilnutrientanalyzer/bloc/authbloc.dart';
+import 'package:soilnutrientanalyzer/bloc/result_bloc.dart';
+import 'package:soilnutrientanalyzer/repository/crop_repository.dart';
 import 'package:soilnutrientanalyzer/repository/login_repository.dart';
+import 'package:soilnutrientanalyzer/repository/results_repository.dart';
 import 'package:soilnutrientanalyzer/repository/user_repository.dart';
 import 'package:soilnutrientanalyzer/screens/auth.dart';
+import 'package:soilnutrientanalyzer/screens/home.dart';
 import 'bloc/crop_dropdown_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -29,13 +32,15 @@ class MyApp extends StatelessWidget {
     LoginUserRepository userRepository = LoginUserFirebaseRepository(firestore);
     AuthRepository authRepository =
         FirebaseAuthRepository(auth, box, userRepository);
+    CropRepository cropRepository = CropFirebaseRepository(firestore);
+    ResultsRepository resultsRepository = ResultsFriebaseRepository(firestore);
     return MultiBlocProvider(
       providers: [
+        BlocProvider<ResultCubit>(
+          create: (context) => ResultCubit(resultsRepository),
+        ),
         BlocProvider<LanguageCubit>(
-          create: (context) => LanguageCubit(
-            TranslateRepo.crops,
-            TranslateRepo.soliType('English'),
-          ),
+          create: (context) => LanguageCubit(cropRepository),
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(authRepository, box),
@@ -44,7 +49,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Humidity Analyzer',
-        home: SignupScreen(),
+        home: Home(),
       ),
     );
   }
