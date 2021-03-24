@@ -37,6 +37,13 @@
             {
               "client_id": "320009345682-5hgedgp75ggq7b5toctbsdt0d4ba4935.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "320009345682-3qcootegbqrvkv7nudjn8t1euto421e5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.soilnutrientanalyzer"
+              }
             }
           ]
         }

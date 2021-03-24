@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soilnutrientanalyzer/generated/l10n.dart';
+import 'package:soilnutrientanalyzer/metadata/meta_text.dart';
 import 'package:soilnutrientanalyzer/model/crop.dart';
 import 'package:soilnutrientanalyzer/model/data_model.dart';
 import '../repo/data_repo.dart';
@@ -24,7 +24,7 @@ class ResultsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          S.of(context).SoilNutrientAnalyzer,
+          MetaText.soilNutrientAnalyzer,
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,

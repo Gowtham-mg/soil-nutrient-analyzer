@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:soilnutrientanalyzer/bloc/login/bloc.dart';
+import 'package:soilnutrientanalyzer/bloc/bloc.dart';
 import 'package:soilnutrientanalyzer/helper/validation_helper.dart';
 import 'package:soilnutrientanalyzer/metadata/meta_asset.dart';
 import 'package:soilnutrientanalyzer/metadata/meta_colors.dart';
@@ -17,12 +17,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SignupScreen extends StatefulWidget {
   @override
   _SignupScreenState createState() => _SignupScreenState();
-}
-
-enum Gender { Male, Female }
-
-extension on Gender {
-  String get stringValue => this == Gender.Male ? 'Male' : 'Female';
 }
 
 class _SignupScreenState extends State<SignupScreen> {
@@ -56,12 +50,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               height: _height * 0.3 + 30,
-              child: Text(
-                MetaText.soilNutrientAnalyzer,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+              child: Center(
+                child: Text(
+                  MetaText.soilNutrientAnalyzer,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ),
@@ -90,16 +86,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     if (state is SocialAuthSuccess ||
                         state is SignInSuccess ||
                         state is SignUpSuccess) {
-                      if (isSignup) {
-                        setState(() {
-                          isSignup = false;
-                        });
-                      } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => Home()));
-                      }
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Home()));
                     } else if (state is AuthErrorState) {
                       Fluttertoast.showToast(
                         msg: state.error,
@@ -322,7 +312,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                     },
                                   ),
                                 ),
-                          // ConfirmSignup(),
                         ],
                       ),
                     );
@@ -348,7 +337,6 @@ class _SignupScreenState extends State<SignupScreen> {
         print('Executing signin');
         BlocProvider.of<AuthBloc>(context).add(SignInEvent(email, password));
       }
-      // Navigator.pushNamed(context, Routes.Health);
     }
   }
 

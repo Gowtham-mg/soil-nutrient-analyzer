@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:soilnutrientanalyzer/bloc/crop_dropdown_bloc.dart';
+import 'package:soilnutrientanalyzer/metadata/meta_text.dart';
 import 'package:soilnutrientanalyzer/model/crop.dart';
 import 'package:soilnutrientanalyzer/repo/crop_repo.dart';
 import 'package:soilnutrientanalyzer/screens/results_screen.dart';
 
-import '../generated/l10n.dart';
 // import 'dart:typed_data';
 // import 'dart:async';
 // import 'package:usb_serial/usb_serial.dart';
@@ -138,7 +138,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).SoilNutrientAnalyzer),
+        title: Text(MetaText.soilNutrientAnalyzer),
         centerTitle: true,
         backgroundColor: Color(0xFF799054),
         elevation: 0,
@@ -162,19 +162,22 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               CustomDropdown(
-                title: S.of(context).SelectLanguage,
+                title: MetaText.selectLanguage,
                 items: languages,
                 value: selectedLanguage,
                 onChanged: (String val) async {
                   switch (val) {
                     case "English":
-                      S.load(Locale('en'));
+                      // TODO:
+                      // S.load(Locale('en'));
                       break;
                     case "தமிழ்":
-                      S.load(Locale('ta'));
+                      // TODO:
+                      // S.load(Locale('ta'));
                       break;
                     case "हिन्दी":
-                      S.load(Locale('hi'));
+                      // TODO:
+                      // S.load(Locale('hi'));
                       break;
                   }
                   setState(() {
@@ -185,7 +188,7 @@ class _HomeState extends State<Home> {
                 },
               ),
               CustomDropdown(
-                title: S.of(context).SelectTypeOfSoil,
+                title: MetaText.SelectTypeOfSoil,
                 items: state.soils,
                 value: state.selectedSoil,
                 onChanged: (String val) {
@@ -198,7 +201,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Expanded(
                       child: Text(
-                        S.of(context).SelectCrop,
+                        MetaText.SelectCrop,
                         style: TextStyle(color: Colors.white),
                       ),
                       flex: 2,
@@ -272,7 +275,7 @@ class _HomeState extends State<Home> {
               Spacer(flex: 1),
               FlatButton(
                 child: Text(
-                  S.of(context).Calculate,
+                  MetaText.Calculate,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
