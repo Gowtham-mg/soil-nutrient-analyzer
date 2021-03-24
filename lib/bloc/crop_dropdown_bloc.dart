@@ -17,13 +17,27 @@ class LanguageCubit extends Cubit<LanguageState> {
     AppResponse<List<String>> soilType =
         await cropRepository.translateSoilType(language);
     if (soilType.isSuccess && basicWords.isSuccess && crops.isSuccess) {
-      emit(LanguageSuccessState(
-        crops.data,
-        langState?.selectedCrop ?? crops.data.first,
-        soilType.data,
-        langState?.selectedSoil ?? soilType.data.first,
-        basicWords.data,
-      ));
+      if (langState == null) {
+        emit(LanguageSuccessState.named(
+          basicWords: basicWords.data,
+          crops: crops.data,
+          selectedCrop: crops.data.first,
+          selectedSoil: soilType.data.first,
+          soils: soilType.data,
+        ));
+      } else {
+        int selectedCropIndex = langState.crops.indexWhere(
+            (element) => element.name == langState.selectedCrop.name);
+        int selectedSoilIndex = langState.soils
+            .indexWhere((element) => element == langState.selectedSoil);
+        emit(LanguageSuccessState.named(
+          basicWords: basicWords.data,
+          crops: crops.data,
+          selectedCrop: crops.data[selectedCropIndex],
+          selectedSoil: soilType.data[selectedSoilIndex],
+          soils: soilType.data,
+        ));
+      }
     } else {
       emit(LanguageErrorState(
           basicWords.error ?? crops.error ?? soilType.error));

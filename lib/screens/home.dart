@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:soilnutrientanalyzer/bloc/crop_dropdown_bloc.dart';
 import 'package:soilnutrientanalyzer/bloc/result_bloc.dart';
+import 'package:soilnutrientanalyzer/bloc/result_history_bloc.dart';
 import 'package:soilnutrientanalyzer/metadata/meta_text.dart';
 import 'package:soilnutrientanalyzer/model/crop.dart';
+import 'package:soilnutrientanalyzer/screens/history_screen.dart';
 import 'package:soilnutrientanalyzer/screens/results_screen.dart';
 
 // import 'dart:typed_data';
@@ -27,7 +29,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    BlocProvider.of<LanguageCubit>(context).updateLanguage('ta', null);
+    BlocProvider.of<LanguageCubit>(context).updateLanguage('en', null);
     super.initState();
   }
 
@@ -40,6 +42,21 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: Color(0xFF799054),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.history,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              BlocProvider.of<ResultHistoryCubit>(context).getHistory();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => HistoryScreen()));
+            },
+          )
+        ],
       ),
       body: BlocBuilder<LanguageCubit, LanguageState>(
           builder: (BuildContext context, LanguageState state) {

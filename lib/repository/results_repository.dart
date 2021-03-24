@@ -1,16 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soilnutrientanalyzer/app_response.dart';
+import 'package:soilnutrientanalyzer/bloc/result_bloc.dart';
 import 'package:soilnutrientanalyzer/model/crop.dart';
 import 'package:soilnutrientanalyzer/model/data_model.dart';
+import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class ResultsRepository {
   Future<AppResponse<DataModel>> cropResults(Crop selectedCrop);
+  Future<void> saveResult(ResultSuccess success);
 }
 
 class ResultsFriebaseRepository extends ResultsRepository {
   final FirebaseFirestore firestore;
-
-  ResultsFriebaseRepository(this.firestore);
+  final Box box;
+  final Uuid uuid;
+  ResultsFriebaseRepository(this.firestore, this.box, this.uuid);
 
   @override
   Future<AppResponse<DataModel>> cropResults(Crop selectedCrop) async {
@@ -26,5 +31,13 @@ class ResultsFriebaseRepository extends ResultsRepository {
     } catch (e) {
       return AppResponse.named(error: e.toString());
     }
+  }
+
+  @override
+  Future<void> saveResult(ResultSuccess success) async {
+    String token = box.get('token').toString();
+    await firestore
+        .collection('result')
+        .add(success.toMap()..addEntries([MapEntry('id', token)]));
   }
 }

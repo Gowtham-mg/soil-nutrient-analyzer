@@ -15,13 +15,9 @@ class CropFirebaseRepository extends CropRepository {
   @override
   Future<AppResponse<List<Crop>>> translateCrop(String language) async {
     try {
-      print(language);
       DocumentSnapshot _cropsSnap =
           await firestore.collection(language).doc('crops').get();
-      print(_cropsSnap.data());
-      print(_cropsSnap.reference.path);
-      print(_cropsSnap.id);
-      var _crops = _cropsSnap.data()['crop names'];
+      var _crops = _cropsSnap.data()['crops'];
       DocumentSnapshot _assetsSnap = await firestore.doc('en/asset').get();
       var _assets = _assetsSnap.data()['assetPath'];
       List<Crop> crops = [];
